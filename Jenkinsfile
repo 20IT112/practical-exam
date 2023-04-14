@@ -47,7 +47,7 @@ pipeline {
                     sh 'mvn clean package'
                     def version = (readFile('pom.xml') =~ '<version>(.+)</version>')[0][1]
                     env.IMAGE_NAME = "$version-Build-$BUILD_NUMBER"
-                    sh "docker build -t mayur181/sakshi:${IMAGE_NAME} ."    
+                    sh "docker build -t sakshi2208/pract_exam:${IMAGE_NAME} ."    
                     }
             }
         }
@@ -75,22 +75,22 @@ pipeline {
                 script{echo 'deploying the application'
                 withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
                     sh "echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin"
-                    sh "docker push mayur181/sakshi:${IMAGE_NAME}"
+                    sh "docker push sakshi2208/pract_exam:${IMAGE_NAME}"
                 }}
                 
              }
         }
-        stage('deploy'){
-            steps{
-                script{
-                    def dockerRestart = 'sudo service docker restart'
-                    def dockerRunCmd = "sudo docker run -p 8080:8080 -d mayur181/sakshi:${IMAGE_NAME}"
-                  sshagent(['ec2-prod']) {
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@54.86.25.242 ${dockerRunCmd}"
-                    }  
-                }
-            }
-        }
+//         stage('deploy'){
+//             steps{
+//                 script{
+//                     def dockerRestart = 'sudo service docker restart'
+//                     def dockerRunCmd = "sudo docker run -p 8080:8080 -d mayur181/sakshi:${IMAGE_NAME}"
+//                   sshagent(['ec2-prod']) {
+//                         sh "ssh -o StrictHostKeyChecking=no ec2-user@54.86.25.242 ${dockerRunCmd}"
+//                     }  
+//                 }
+//             }
+//         }
 
         // stage('commit and push to git'){
         //     steps{
