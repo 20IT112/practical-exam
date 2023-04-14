@@ -80,17 +80,18 @@ pipeline {
                 
              }
         }
-//         stage('deploy'){
-//             steps{
-//                 script{
-//                     def dockerRestart = 'sudo service docker restart'
-//                     def dockerRunCmd = "sudo docker run -p 8080:8080 -d mayur181/sakshi:${IMAGE_NAME}"
-//                   sshagent(['ec2-prod']) {
-//                         sh "ssh -o StrictHostKeyChecking=no ec2-user@54.86.25.242 ${dockerRunCmd}"
-//                     }  
-//                 }
-//             }
-//         }
+    stage('deploy'){
+            steps{
+                script{
+                    def dockerRunCmd = "sudo docker run -p 8080:8080 -d sakshi2208/pract_exam:${IMAGE_NAME}"
+                    def dockerRestart = 'sudo service docker restart'
+                  sshagent(['ec2-prod']) {
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@52.91.97.217  ${dockerRestart}"
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@52.91.97.217  ${dockerRunCmd}"
+                    }  
+                }
+            }
+        }
 
         // stage('commit and push to git'){
         //     steps{
